@@ -11,15 +11,17 @@ Before starting, ensure you have the following installed:
 - TypeScript
 - Express
 
-You can install Node.js and npm from [here](https://nodejs.org/). 
+You can install Node.js and npm from here(https://nodejs.org/).
 
+## Process
 Initialize your project: npm init -y
 
 Once Node.js is installed, you can install TypeScript and Express globally using npm:
 
-```bash
 npm install --save-dev typescript
 npm i express
+npm i -D @types/node
+npm i -D @types/express
 
 Create a tsconfig.json file: npx tsc --init
 Add some keys in the tsconfig.json file: 
