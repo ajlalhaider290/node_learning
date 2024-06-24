@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTodo = exports.partialUpdateTodo = exports.updateTodo = exports.createTodo = exports.getTodoById = exports.getAllTodos = void 0;
 let todos = [
     { id: 1, title: 'Todo 1', userId: 1, isCompleted: false, createdDate: new Date(), updatedDate: new Date() },
-    // Add more todos as needed
 ];
 const getAllTodos = () => {
     return todos;

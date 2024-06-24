@@ -25,15 +25,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const userController = __importStar(require("../controllers/userController"));
+const middleware = __importStar(require("../middlewares/validationMiddleware"));
 const router = (0, express_1.Router)();
+router.use(middleware.getTime);
 router.route('/')
     .get(userController.getAllUsers)
-    .post(userController.createUser);
+    .post(middleware.validateUserBody, middleware.getTime, userController.createUser);
 router.route('/:id')
-    .get(userController.getUserById)
-    .put(userController.updateUser)
-    .patch(userController.partialUpdateUser)
-    .delete(userController.deleteUser);
-router.get('/:id/todos', userController.getUserTodos);
-router.get('/:id/todos/:todoId', userController.getUserTodoById);
+    .get(middleware.validateUserIdQuery, middleware.getID, userController.getUserById)
+    .put(middleware.validateUserIdQuery, middleware.getID, userController.updateUser)
+    .patch(middleware.validateUserIdQuery, middleware.getID, userController.partialUpdateUser)
+    .delete(middleware.validateUserIdQuery, middleware.getID, userController.deleteUser);
+router.get('/:id/todos', middleware.validateUserIdQuery, middleware.getID, userController.getUserTodos);
+router.get('/:id/todos/:todoId', middleware.validateUserIdQuery, middleware.getID, userController.getUserTodoById);
 exports.default = router;

@@ -25,11 +25,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const todoController = __importStar(require("../controllers/todoController"));
+const middleware = __importStar(require("../middlewares/validationMiddleware"));
 const router = (0, express_1.Router)();
+// This is an application level middleware and will run for all routes
+router.use(middleware.getTime);
 router.get('/', todoController.getAllTodos);
-router.get('/:id', todoController.getTodoById);
+// These are router-level middleware and will run only for this specific route
+router.get('/:id', middleware.validateUserIdQuery, middleware.getID, todoController.getTodoById);
 router.post('/', todoController.createTodo);
-router.put('/:id', todoController.updateTodo);
-router.patch('/:id', todoController.partialUpdateTodo);
-router.delete('/:id', todoController.deleteTodo);
+router.put('/:id', middleware.validateUserIdQuery, middleware.getID, todoController.updateTodo);
+router.patch('/:id', middleware.validateUserIdQuery, middleware.getID, todoController.partialUpdateTodo);
+router.delete('/:id', middleware.validateUserIdQuery, middleware.getID, todoController.deleteTodo);
 exports.default = router;
