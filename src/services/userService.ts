@@ -1,4 +1,4 @@
-interface User {
+export interface User {
     id: number;
     name: string;
     email: string;
@@ -8,7 +8,7 @@ interface User {
     updatedDate: Date;
   }
   
-  let users: User[] = [
+  export let users: User[] = [
     { id: 1, name: 'John Doe', email: 'john@example.com', password: '123456', isDisabled: false, createdDate: new Date(), updatedDate: new Date() },
   ];
   

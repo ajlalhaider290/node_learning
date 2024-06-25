@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserTodoById = exports.getUserTodos = exports.deleteUser = exports.partialUpdateUser = exports.updateUser = exports.createUser = exports.getUserById = exports.getAllUsers = void 0;
-let users = [
+exports.getUserTodoById = exports.getUserTodos = exports.deleteUser = exports.partialUpdateUser = exports.updateUser = exports.createUser = exports.getUserById = exports.getAllUsers = exports.users = void 0;
+exports.users = [
     { id: 1, name: 'John Doe', email: 'john@example.com', password: '123456', isDisabled: false, createdDate: new Date(), updatedDate: new Date() },
 ];
 const getAllUsers = () => {
-    return users;
+    return exports.users;
 };
 exports.getAllUsers = getAllUsers;
 const getUserById = (id) => {
-    return users.find(user => user.id === parseInt(id));
+    return exports.users.find(user => user.id === parseInt(id));
 };
 exports.getUserById = getUserById;
 const createUser = (user) => {
-    const newUser = Object.assign(Object.assign({}, user), { id: users.length + 1, createdDate: new Date(), updatedDate: new Date() });
-    users.push(newUser);
+    const newUser = Object.assign(Object.assign({}, user), { id: exports.users.length + 1, createdDate: new Date(), updatedDate: new Date() });
+    exports.users.push(newUser);
     return newUser;
 };
 exports.createUser = createUser;
 const updateUser = (id, updatedData) => {
-    const user = users.find(user => user.id === parseInt(id));
+    const user = exports.users.find(user => user.id === parseInt(id));
     if (user) {
         Object.assign(user, updatedData, { updatedDate: new Date() });
         return user;
@@ -32,7 +32,7 @@ const partialUpdateUser = (id, updatedData) => {
 };
 exports.partialUpdateUser = partialUpdateUser;
 const deleteUser = (id) => {
-    users = users.filter(user => user.id !== parseInt(id));
+    exports.users = exports.users.filter(user => user.id !== parseInt(id));
 };
 exports.deleteUser = deleteUser;
 const getUserTodos = (userId) => {
