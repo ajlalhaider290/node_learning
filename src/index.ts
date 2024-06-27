@@ -10,9 +10,12 @@ const app: Application = express();
 connectDB();
 
 app.use(express.json());
+
+// routes
 app.use('/api/users', userRoutes);
 app.use('/api/todos', todoRoutes);
 
+// error handling middleware
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;

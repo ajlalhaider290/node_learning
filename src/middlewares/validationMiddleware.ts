@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { CustomError } from '../utils/customError';
-import * as userService from '../services/userService';
+import mongoose from 'mongoose';
 
 export const validateUserBody = (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password, isDisabled } = req.body;
@@ -25,16 +25,10 @@ export const validateUserBody = (req: Request, res: Response, next: NextFunction
 };
 
 export const validateUserIdQuery = (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-  
-    if (!id || isNaN(Number(id))) {
+  const userId = new mongoose.Types.ObjectId(req.params.id);
+    if (!userId) {
       throw new CustomError('Invalid or missing user ID', 400);
     }
-    const user = userService.users.find((u: userService.User) => u.id === Number(id));
-    if (!user) {
-    throw new CustomError('User not found', 404);
-    }
-
     next();
   };
 

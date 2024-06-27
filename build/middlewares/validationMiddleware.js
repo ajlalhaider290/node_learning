@@ -1,31 +1,11 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getID = exports.getTime = exports.validateUserIdQuery = exports.validateUserBody = void 0;
 const customError_1 = require("../utils/customError");
-const userService = __importStar(require("../services/userService"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const validateUserBody = (req, res, next) => {
     const { name, email, password, isDisabled } = req.body;
     if (!name || typeof name !== 'string') {
@@ -44,13 +24,9 @@ const validateUserBody = (req, res, next) => {
 };
 exports.validateUserBody = validateUserBody;
 const validateUserIdQuery = (req, res, next) => {
-    const { id } = req.params;
-    if (!id || isNaN(Number(id))) {
+    const userId = new mongoose_1.default.Types.ObjectId(req.params.id);
+    if (!userId) {
         throw new customError_1.CustomError('Invalid or missing user ID', 400);
-    }
-    const user = userService.users.find((u) => u.id === Number(id));
-    if (!user) {
-        throw new customError_1.CustomError('User not found', 404);
     }
     next();
 };

@@ -1,67 +1,129 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserTodoById = exports.getUserTodos = exports.deleteUser = exports.partialUpdateUser = exports.updateUser = exports.createUser = exports.getUserById = exports.getAllUsers = void 0;
-const userService = __importStar(require("../services/userService"));
-const getAllUsers = (req, res) => {
-    const users = userService.getAllUsers();
-    res.json(users);
-};
+const mongoose_1 = __importDefault(require("mongoose"));
+const users_1 = __importDefault(require("../models/users"));
+const todos_1 = __importDefault(require("../models/todos"));
+// Get all users
+const getAllUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield users_1.default.find();
+        res.status(200).json(users);
+    }
+    catch (err) {
+        next(err);
+    }
+});
 exports.getAllUsers = getAllUsers;
-const getUserById = (req, res) => {
-    const user = userService.getUserById(req.params.id);
-    res.json(user);
-};
+// Get a user by ID
+const getUserById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = new mongoose_1.default.Types.ObjectId(req.params.id);
+        const user = yield users_1.default.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user);
+    }
+    catch (err) {
+        next(err);
+    }
+});
 exports.getUserById = getUserById;
-const createUser = (req, res) => {
-    const newUser = userService.createUser(req.body);
-    res.status(201).json(newUser);
-};
+// Create a new user
+const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = new users_1.default(req.body);
+        const savedUser = yield user.save();
+        res.status(201).json(savedUser);
+    }
+    catch (err) {
+        next(err);
+    }
+});
 exports.createUser = createUser;
-const updateUser = (req, res) => {
-    const updatedUser = userService.updateUser(req.params.id, req.body);
-    res.json(updatedUser);
-};
+// Update a user by ID
+const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = new mongoose_1.default.Types.ObjectId(req.params.id);
+        const user = yield users_1.default.findByIdAndUpdate(userId, req.body, { new: true });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user);
+    }
+    catch (err) {
+        next(err);
+    }
+});
 exports.updateUser = updateUser;
-const partialUpdateUser = (req, res) => {
-    const updatedUser = userService.partialUpdateUser(req.params.id, req.body);
-    res.json(updatedUser);
-};
+// Partially update a user by ID
+const partialUpdateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = new mongoose_1.default.Types.ObjectId(req.params.id);
+        const user = yield users_1.default.findByIdAndUpdate(userId, req.body, { new: true });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user);
+    }
+    catch (err) {
+        next(err);
+    }
+});
 exports.partialUpdateUser = partialUpdateUser;
-const deleteUser = (req, res) => {
-    userService.deleteUser(req.params.id);
-    res.status(204).send();
-};
+// Delete a user by ID
+const deleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = new mongoose_1.default.Types.ObjectId(req.params.id);
+        const user = yield users_1.default.findByIdAndDelete(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json({ message: 'User deleted' });
+    }
+    catch (err) {
+        next(err);
+    }
+});
 exports.deleteUser = deleteUser;
-const getUserTodos = (req, res) => {
-    const todos = userService.getUserTodos(req.params.id);
-    res.json(todos);
-};
+// Get all todos for a user
+const getUserTodos = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = new mongoose_1.default.Types.ObjectId(req.params.id);
+        const todos = yield todos_1.default.find({ userId });
+        res.status(200).json(todos);
+    }
+    catch (err) {
+        next(err);
+    }
+});
 exports.getUserTodos = getUserTodos;
-const getUserTodoById = (req, res) => {
-    const todo = userService.getUserTodoById(req.params.id, req.params.todoId);
-    res.json(todo);
-};
+// Get a specific todo for a user
+const getUserTodoById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = new mongoose_1.default.Types.ObjectId(req.params.id);
+        const todoId = new mongoose_1.default.Types.ObjectId(req.params.todoId);
+        const todo = yield todos_1.default.findOne({ _id: todoId, userId });
+        if (!todo) {
+            return res.status(404).json({ message: 'Todo not found' });
+        }
+        res.status(200).json(todo);
+    }
+    catch (err) {
+        next(err);
+    }
+});
 exports.getUserTodoById = getUserTodoById;

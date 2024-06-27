@@ -1,32 +1,80 @@
-import { Request, Response } from 'express';
-import * as todoService from '../services/todoService';
+import { Request, Response, NextFunction } from 'express';
+import mongoose from 'mongoose';
+import Todo from '../models/todos';
 
-export const getAllTodos = (req: Request, res: Response) => {
-  const todos = todoService.getAllTodos();
-  res.json(todos);
+// Get all todos
+export const getAllTodos = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const todos = await Todo.find();
+    res.status(200).json(todos);
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const getTodoById = (req: Request, res: Response) => {
-  const todo = todoService.getTodoById(req.params.id);
-  res.json(todo);
+// Get a todo by ID
+export const getTodoById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const todoId = new mongoose.Types.ObjectId(req.params.id);
+    const todo = await Todo.findById(todoId);
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.status(200).json(todo);
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const createTodo = (req: Request, res: Response) => {
-  const newTodo = todoService.createTodo(req.body);
-  res.status(201).json(newTodo);
+// Create a new todo
+export const createTodo = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const todo = new Todo(req.body);
+    const savedTodo = await todo.save();
+    res.status(201).json(savedTodo);
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const updateTodo = (req: Request, res: Response) => {
-  const updatedTodo = todoService.updateTodo(req.params.id, req.body);
-  res.json(updatedTodo);
+// Update a todo by ID
+export const updateTodo = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const todoId = new mongoose.Types.ObjectId(req.params.id);
+    const todo = await Todo.findByIdAndUpdate(todoId, req.body, { new: true });
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.status(200).json(todo);
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const partialUpdateTodo = (req: Request, res: Response) => {
-  const updatedTodo = todoService.partialUpdateTodo(req.params.id, req.body);
-  res.json(updatedTodo);
+// Partially update a todo by ID
+export const partialUpdateTodo = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const todoId = new mongoose.Types.ObjectId(req.params.id);
+    const todo = await Todo.findByIdAndUpdate(todoId, req.body, { new: true });
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.status(200).json(todo);
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const deleteTodo = (req: Request, res: Response) => {
-  todoService.deleteTodo(req.params.id);
-  res.status(204).send();
+// Delete a todo by ID
+export const deleteTodo = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const todoId = new mongoose.Types.ObjectId(req.params.id);
+    const todo = await Todo.findByIdAndDelete(todoId);
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.status(200).json({ message: 'Todo deleted' });
+  } catch (err) {
+    next(err);
+  }
 };

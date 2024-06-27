@@ -12,8 +12,10 @@ const app = (0, express_1.default)();
 // Connect to MongoDB
 (0, database_1.default)();
 app.use(express_1.default.json());
+// routes
 app.use('/api/users', userRoutes_1.default);
 app.use('/api/todos', todoRoutes_1.default);
+// error handling middleware
 app.use(errorHandler_1.errorHandler);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
