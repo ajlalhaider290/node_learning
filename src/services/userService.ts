@@ -1,12 +1,4 @@
-export interface User {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-    isDisabled: boolean;
-    createdDate: Date;
-    updatedDate: Date;
-  }
+import { User } from '../interfaces';
   
   export let users: User[] = [
     { id: 1, name: 'John Doe', email: 'john@example.com', password: '123456', isDisabled: false, createdDate: new Date(), updatedDate: new Date() },

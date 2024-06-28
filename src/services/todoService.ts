@@ -1,11 +1,4 @@
-interface Todo {
-    id: number;
-    title: string;
-    userId: number;
-    isCompleted: boolean;
-    createdDate: Date;
-    updatedDate: Date;
-  }
+import { Todo } from '../interfaces';
   
   let todos: Todo[] = [
     { id: 1, title: 'Todo 1', userId: 1, isCompleted: false, createdDate: new Date(), updatedDate: new Date() },
