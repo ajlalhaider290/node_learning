@@ -1,32 +1,74 @@
-import { Request, Response } from 'express';
-import * as todoService from '../services/todoService';
+import { Request, Response, NextFunction } from 'express';
+import * as todoServices from '../services/todoServices';
 
-export const getAllTodos = (req: Request, res: Response) => {
-  const todos = todoService.getAllTodos();
-  res.json(todos);
+// Get all todos
+export const getAllTodosController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const todos = await todoServices.getAllTodos();
+    res.status(200).json(todos);
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const getTodoById = (req: Request, res: Response) => {
-  const todo = todoService.getTodoById(req.params.id);
-  res.json(todo);
+// Get a todo by ID
+export const getTodoByIdController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const todo = await todoServices.getTodoById(req.params.id);
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.status(200).json(todo);
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const createTodo = (req: Request, res: Response) => {
-  const newTodo = todoService.createTodo(req.body);
-  res.status(201).json(newTodo);
+// Create a new todo
+export const createTodoController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const todo = await todoServices.createTodo(req.body);
+    res.status(201).json(todo);
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const updateTodo = (req: Request, res: Response) => {
-  const updatedTodo = todoService.updateTodo(req.params.id, req.body);
-  res.json(updatedTodo);
+// Update a todo by ID
+export const updateTodoController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const todo = await todoServices.updateTodo(req.params.id, req.body);
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.status(200).json(todo);
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const partialUpdateTodo = (req: Request, res: Response) => {
-  const updatedTodo = todoService.partialUpdateTodo(req.params.id, req.body);
-  res.json(updatedTodo);
+// Partially update a todo by ID
+export const partialUpdateTodoController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const todo = await todoServices.updateTodo(req.params.id, req.body);
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.status(200).json(todo);
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const deleteTodo = (req: Request, res: Response) => {
-  todoService.deleteTodo(req.params.id);
-  res.status(204).send();
+// Delete a todo by ID
+export const deleteTodoController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const todo = await todoServices.deleteTodo(req.params.id);
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.status(200).json({ message: 'Todo deleted' });
+  } catch (err) {
+    next(err);
+  }
 };

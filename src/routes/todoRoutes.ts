@@ -7,13 +7,13 @@ const router = Router();
 // This is an application level middleware and will run for all routes
 router.use(middleware.getTime)
 
-router.get('/', todoController.getAllTodos);
+router.get('/', todoController.getAllTodosController);
 
 // These are router-level middleware and will run only for this specific route
-router.get('/:id', middleware.validateUserIdQuery, middleware.getID, todoController.getTodoById);
-router.post('/', todoController.createTodo);
-router.put('/:id', middleware.validateUserIdQuery, middleware.getID, todoController.updateTodo);
-router.patch('/:id', middleware.validateUserIdQuery, middleware.getID, todoController.partialUpdateTodo);
-router.delete('/:id', middleware.validateUserIdQuery, middleware.getID, todoController.deleteTodo);
+router.get('/:id', middleware.validateUserIdQuery, middleware.getID, todoController.getTodoByIdController);
+router.post('/', todoController.createTodoController);
+router.put('/:id', middleware.validateUserIdQuery, middleware.getID, todoController.updateTodoController);
+router.patch('/:id', middleware.validateUserIdQuery, middleware.getID, todoController.partialUpdateTodoController);
+router.delete('/:id', middleware.validateUserIdQuery, middleware.getID, todoController.deleteTodoController);
 
 export default router;
