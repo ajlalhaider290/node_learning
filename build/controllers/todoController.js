@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,29 +31,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTodo = exports.partialUpdateTodo = exports.updateTodo = exports.createTodo = exports.getTodoById = exports.getAllTodos = void 0;
-const mongoose_1 = __importDefault(require("mongoose"));
-const todos_1 = __importDefault(require("../models/todos"));
+exports.deleteTodoController = exports.partialUpdateTodoController = exports.updateTodoController = exports.createTodoController = exports.getTodoByIdController = exports.getAllTodosController = void 0;
+const todoServices = __importStar(require("../services/todoServices"));
 // Get all todos
-const getAllTodos = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllTodosController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const todos = yield todos_1.default.find();
+        const todos = yield todoServices.getAllTodos();
         res.status(200).json(todos);
     }
     catch (err) {
         next(err);
     }
 });
-exports.getAllTodos = getAllTodos;
+exports.getAllTodosController = getAllTodosController;
 // Get a todo by ID
-const getTodoById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const getTodoByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const todoId = new mongoose_1.default.Types.ObjectId(req.params.id);
-        const todo = yield todos_1.default.findById(todoId);
+        const todo = yield todoServices.getTodoById(req.params.id);
         if (!todo) {
             return res.status(404).json({ message: 'Todo not found' });
         }
@@ -40,24 +58,22 @@ const getTodoById = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         next(err);
     }
 });
-exports.getTodoById = getTodoById;
+exports.getTodoByIdController = getTodoByIdController;
 // Create a new todo
-const createTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const createTodoController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const todo = new todos_1.default(req.body);
-        const savedTodo = yield todo.save();
-        res.status(201).json(savedTodo);
+        const todo = yield todoServices.createTodo(req.body);
+        res.status(201).json(todo);
     }
     catch (err) {
         next(err);
     }
 });
-exports.createTodo = createTodo;
+exports.createTodoController = createTodoController;
 // Update a todo by ID
-const updateTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const updateTodoController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const todoId = new mongoose_1.default.Types.ObjectId(req.params.id);
-        const todo = yield todos_1.default.findByIdAndUpdate(todoId, req.body, { new: true });
+        const todo = yield todoServices.updateTodo(req.params.id, req.body);
         if (!todo) {
             return res.status(404).json({ message: 'Todo not found' });
         }
@@ -67,12 +83,11 @@ const updateTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         next(err);
     }
 });
-exports.updateTodo = updateTodo;
+exports.updateTodoController = updateTodoController;
 // Partially update a todo by ID
-const partialUpdateTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const partialUpdateTodoController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const todoId = new mongoose_1.default.Types.ObjectId(req.params.id);
-        const todo = yield todos_1.default.findByIdAndUpdate(todoId, req.body, { new: true });
+        const todo = yield todoServices.partialUpdateTodo(req.params.id, req.body);
         if (!todo) {
             return res.status(404).json({ message: 'Todo not found' });
         }
@@ -82,12 +97,11 @@ const partialUpdateTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         next(err);
     }
 });
-exports.partialUpdateTodo = partialUpdateTodo;
+exports.partialUpdateTodoController = partialUpdateTodoController;
 // Delete a todo by ID
-const deleteTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteTodoController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const todoId = new mongoose_1.default.Types.ObjectId(req.params.id);
-        const todo = yield todos_1.default.findByIdAndDelete(todoId);
+        const todo = yield todoServices.deleteTodo(req.params.id);
         if (!todo) {
             return res.status(404).json({ message: 'Todo not found' });
         }
@@ -97,4 +111,4 @@ const deleteTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         next(err);
     }
 });
-exports.deleteTodo = deleteTodo;
+exports.deleteTodoController = deleteTodoController;

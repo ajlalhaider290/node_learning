@@ -1,12 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import mongoose from 'mongoose';
-import User from '../models/users';
-import Todo from '../models/todos';
+import * as userServices from '../services/userServices';
 
 // Get all users
-export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllUsersController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await User.find();
+    const users = await userServices.getAllUsers();
     res.status(200).json(users);
   } catch (err) {
     next(err);
@@ -14,10 +12,9 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
 };
 
 // Get a user by ID
-export const getUserById = async (req: Request, res: Response, next: NextFunction) => {
+export const getUserByIdController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = new mongoose.Types.ObjectId(req.params.id);
-    const user = await User.findById(userId);
+    const user = await userServices.getUserById(req.params.id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -28,21 +25,19 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
 };
 
 // Create a new user
-export const createUser = async (req: Request, res: Response, next: NextFunction) => {
+export const createUserController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = new User(req.body);
-    const savedUser = await user.save();
-    res.status(201).json(savedUser);
+    const user = await userServices.createUser(req.body);
+    res.status(201).json(user);
   } catch (err) {
     next(err);
   }
 };
 
 // Update a user by ID
-export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
+export const updateUserController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = new mongoose.Types.ObjectId(req.params.id);
-    const user = await User.findByIdAndUpdate(userId, req.body, { new: true });
+    const user = await userServices.updateUser(req.params.id, req.body);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -53,10 +48,9 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 };
 
 // Partially update a user by ID
-export const partialUpdateUser = async (req: Request, res: Response, next: NextFunction) => {
+export const partialUpdateUserController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = new mongoose.Types.ObjectId(req.params.id);
-    const user = await User.findByIdAndUpdate(userId, req.body, { new: true });
+    const user = await userServices.partialUpdateUser(req.params.id, req.body);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -67,10 +61,9 @@ export const partialUpdateUser = async (req: Request, res: Response, next: NextF
 };
 
 // Delete a user by ID
-export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteUserController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = new mongoose.Types.ObjectId(req.params.id);
-    const user = await User.findByIdAndDelete(userId);
+    const user = await userServices.deleteUser(req.params.id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -81,10 +74,9 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
 };
 
 // Get all todos for a user
-export const getUserTodos = async (req: Request, res: Response, next: NextFunction) => {
+export const getUserTodosController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = new mongoose.Types.ObjectId(req.params.id);
-    const todos = await Todo.find({ userId });
+    const todos = await userServices.getUserTodos(req.params.id);
     res.status(200).json(todos);
   } catch (err) {
     next(err);
@@ -92,11 +84,9 @@ export const getUserTodos = async (req: Request, res: Response, next: NextFuncti
 };
 
 // Get a specific todo for a user
-export const getUserTodoById = async (req: Request, res: Response, next: NextFunction) => {
+export const getUserTodoByIdController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = new mongoose.Types.ObjectId(req.params.id);
-    const todoId = new mongoose.Types.ObjectId(req.params.todoId);
-    const todo = await Todo.findOne({ _id: todoId, userId });
+    const todo = await userServices.getUserTodoById(req.params.id, req.params.todoId);
     if (!todo) {
       return res.status(404).json({ message: 'Todo not found' });
     }

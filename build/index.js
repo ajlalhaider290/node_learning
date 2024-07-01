@@ -7,10 +7,10 @@ const express_1 = __importDefault(require("express"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const todoRoutes_1 = __importDefault(require("./routes/todoRoutes"));
 const errorHandler_1 = require("./middlewares/errorHandler");
-const database_1 = __importDefault(require("./database"));
+const databaseService_1 = __importDefault(require("./services/databaseService"));
 const app = (0, express_1.default)();
 // Connect to MongoDB
-(0, database_1.default)();
+(0, databaseService_1.default)();
 app.use(express_1.default.json());
 // routes
 app.use('/api/users', userRoutes_1.default);
