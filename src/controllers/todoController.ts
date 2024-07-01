@@ -50,7 +50,7 @@ export const updateTodoController = async (req: Request, res: Response, next: Ne
 // Partially update a todo by ID
 export const partialUpdateTodoController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const todo = await todoServices.partialUpdateTodo(req.params.id, req.body);
+    const todo = await todoServices.updateTodo(req.params.id, req.body);
     if (!todo) {
       return res.status(404).json({ message: 'Todo not found' });
     }

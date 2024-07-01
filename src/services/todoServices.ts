@@ -18,10 +18,6 @@ export const updateTodo = async (todoId: string, todoData: any) => {
   return await Todo.findByIdAndUpdate(new mongoose.Types.ObjectId(todoId), todoData, { new: true });
 };
 
-export const partialUpdateTodo = async (todoId: string, todoData: any) => {
-  return await Todo.findByIdAndUpdate(new mongoose.Types.ObjectId(todoId), todoData, { new: true });
-};
-
 export const deleteTodo = async (todoId: string) => {
   return await Todo.findByIdAndDelete(new mongoose.Types.ObjectId(todoId));
 };

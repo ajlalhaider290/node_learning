@@ -50,7 +50,7 @@ export const updateUserController = async (req: Request, res: Response, next: Ne
 // Partially update a user by ID
 export const partialUpdateUserController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await userServices.partialUpdateUser(req.params.id, req.body);
+    const user = await userServices.updateUser(req.params.id, req.body);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }

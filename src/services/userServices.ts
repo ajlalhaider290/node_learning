@@ -19,10 +19,6 @@ export const updateUser = async (userId: string, userData: any) => {
   return await User.findByIdAndUpdate(new mongoose.Types.ObjectId(userId), userData, { new: true });
 };
 
-export const partialUpdateUser = async (userId: string, userData: any) => {
-  return await User.findByIdAndUpdate(new mongoose.Types.ObjectId(userId), userData, { new: true });
-};
-
 export const deleteUser = async (userId: string) => {
   return await User.findByIdAndDelete(new mongoose.Types.ObjectId(userId));
 };
