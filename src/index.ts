@@ -1,15 +1,22 @@
 import express, { Application, Request, Response } from 'express';
+import userRoutes from './routes/userRoutes';
+import todoRoutes from './routes/todoRoutes';
+import { errorHandler } from './middlewares/errorHandler';
+import connectDB from './database';
 
 const app: Application = express();
-const port: number = 3000;
 
-// A simple get request
-app.get('/', (request: Request, response: Response)=>{
-    response.status(200).send("Hello World");
+// Connect to MongoDB
+connectDB();
 
-})
+app.use(express.json());
+app.use('/api/users', userRoutes);
+app.use('/api/todos', todoRoutes);
 
-// This method listens for a successful connection
-app.listen(port, ()=>{
-    console.log('Connected successfully on port: ' + port)
-})
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
