@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import * as userServices from '../services/userServices';
+import users from '../models/users';
+
+
 
 // Get all users
 export const getAllUsersController = async (req: Request, res: Response, next: NextFunction) => {
@@ -94,4 +97,14 @@ export const getUserTodoByIdController = async (req: Request, res: Response, nex
   } catch (err) {
     next(err);
   }
+};
+
+// User Login
+export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
+  const { email, password } = req.body;
+  const token = await userServices.getAuthToken(email, password);
+  
+
+  
+  res.send({ token });
 };
