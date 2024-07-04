@@ -3,6 +3,7 @@ import userRoutes from './routes/userRoutes';
 import todoRoutes from './routes/todoRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 import connectToDB from './services/databaseService';
+import './cronJobs/todoCrons';
 
 const app: Application = express();
 
