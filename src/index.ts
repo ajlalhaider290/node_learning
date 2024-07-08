@@ -2,17 +2,20 @@ import express, { Application, Request, Response } from 'express';
 import userRoutes from './routes/userRoutes';
 import todoRoutes from './routes/todoRoutes';
 import { errorHandler } from './middlewares/errorHandler';
-import connectDB from './database';
+import connectToDB from './services/databaseService';
 
 const app: Application = express();
 
 // Connect to MongoDB
-connectDB();
+connectToDB();
 
 app.use(express.json());
+
+// routes
 app.use('/api/users', userRoutes);
 app.use('/api/todos', todoRoutes);
 
+// error handling middleware
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;

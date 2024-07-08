@@ -7,14 +7,14 @@ const router = Router();
 router.use(middleware.getTime)
 
 router.route('/')
-.get(userController.getAllUsers)
-.post(middleware.validateUserBody, middleware.getTime, userController.createUser);
+.get(userController.getAllUsersController)
+.post(middleware.validateUserBody, middleware.getTime, userController.createUserController);
 router.route('/:id')
-.get(middleware.validateUserIdQuery, middleware.getID, userController.getUserById)
-.put(middleware.validateUserIdQuery, middleware.getID, userController.updateUser)
-.patch(middleware.validateUserIdQuery, middleware.getID, userController.partialUpdateUser)
-.delete(middleware.validateUserIdQuery, middleware.getID, userController.deleteUser);
-router.get('/:id/todos', middleware.validateUserIdQuery, middleware.getID, userController.getUserTodos);
-router.get('/:id/todos/:todoId', middleware.validateUserIdQuery, middleware.getID, userController.getUserTodoById);
+.get(middleware.validateUserIdQuery, middleware.getID, userController.getUserByIdController)
+.put(middleware.validateUserIdQuery, middleware.getID, userController.updateUserController)
+.patch(middleware.validateUserIdQuery, middleware.getID, userController.partialUpdateUserController)
+.delete(middleware.validateUserIdQuery, middleware.getID, userController.deleteUserController);
+router.get('/:id/todos', middleware.validateUserIdQuery, middleware.getID, userController.getUserTodosController);
+router.get('/:id/todos/:todoId', middleware.validateUserIdQuery, middleware.getID, userController.getUserTodoByIdController);
 
 export default router;
