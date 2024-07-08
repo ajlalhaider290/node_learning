@@ -14,7 +14,9 @@
 
     /* Type Checking */
     "strict": true,                                      /* Enable all strict type-checking options. */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
+    "noImplicitAny": false,
+    "typeRoots": ["./node_modules/@types", "./custom.d.ts"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "src/services/databaseService.ts"]
 }
